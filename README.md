@@ -1,4 +1,4 @@
-# nicktools
+# nicktools alpha release
 
 A knowledge graph MCP server for research with source provenance. 55 operations across 5 meta-tools, a four-tier web capture pipeline, and a self-documenting session system — all backed by Neo4j.
 
