@@ -1,0 +1,211 @@
+"""Deprecated: use research("read", {"stealth": true}) instead.
+
+Anti-detection web browsing via nodriver (undetected-chromedriver).
+Loads a URL in a headless Chromium browser with bot-evasion techniques.
+Returns page text, metadata, and optional cached results.
+Uses lib/browsing.py for rate limiting, caching, and anti-detection config.
+
+NOTE: This file is still used as a subprocess target by read.py's stealth path.
+Do not delete it while read.py depends on it.
+---
+description: "[Deprecated] Anti-detection browsing — use read(stealth=true) instead"
+databases: []
+creates_nodes: []
+creates_edges: []
+---
+"""
+import nodriver as uc
+import asyncio
+import json
+import hashlib
+import time
+import warnings
+import sys
+import os
+import io
+from pathlib import Path
+from urllib.parse import urlparse
+
+# UTF-8 output handling
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+
+# Add nicktools package to path for lib/ modules
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from lib.io import load_params, output
+from lib.paths import ensure_dir
+from lib.browsing import (BROWSE_RATE_FILE, BROWSE_DEFAULT_DELAY, BROWSE_CACHE_TTL,
+                           BROWSE_MAX_RETRIES, BROWSE_CACHE_DIR,
+                           enforce_rate_limit, record_request)
+
+warnings.filterwarnings("ignore", category=ResourceWarning)
+
+p = load_params()
+
+url = p["url"]
+p.setdefault("extract", "text")  # default extract mode
+p.setdefault("wait_seconds", 3)  # default page wait
+domain = urlparse(url).netloc.replace("www.", "")
+rate_file = Path(BROWSE_RATE_FILE)
+cache_dir = Path(BROWSE_CACHE_DIR)
+cache_ttl = p.get("cache_ttl", BROWSE_CACHE_TTL)
+max_retries = p.get("max_retries", BROWSE_MAX_RETRIES)
+
+# -- Cache check (before rate limiter -- no point waiting if cached) --
+cache_key = hashlib.sha256(f"{url}|{p['extract']}".encode()).hexdigest()[:16]
+cache_file = cache_dir / domain / f"{cache_key}.json"
+
+_cache_hit = False
+if not p.get("bypass_cache") and cache_file.exists():
+    try:
+        cached = json.loads(cache_file.read_text(encoding="utf-8"))
+        cache_age = time.time() - cached.get("cached_at", 0)
+        if cache_age < cache_ttl:
+            cached["_from_cache"] = True
+            cached["_cache_age_seconds"] = round(cache_age)
+            output(cached)
+            _cache_hit = True
+    except Exception:
+        pass  # corrupted cache, proceed with fresh fetch
+
+if _cache_hit:
+    sys.exit(0)  # safe now -- no bare except wrapping this
+
+# -- Shared rate limiter (only runs if cache missed) --
+rate_info = enforce_rate_limit(
+    domain, rate_file,
+    default_delay=p.get("default_delay", BROWSE_DEFAULT_DELAY),
+    min_delay=p.get("min_delay"),
+)
+if rate_info["waited"]:
+    output({
+        "rate_limited": True,
+        "domain": domain,
+        "waiting_seconds": rate_info["wait_seconds"],
+        "reason": f"Rate limit: {rate_info['effective_delay']}s between requests to {domain}"
+            + (" (elevated: previously blocked)" if rate_info["was_blocked"] else ""),
+    })
+
+# -- Fetch with retry --
+async def browse(attempt=1):
+    browser = await uc.start(
+        headless=True,
+        browser_args=[
+            '--no-first-run',
+            '--no-default-browser-check',
+            '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36'
+        ]
+    )
+    try:
+        page = await browser.get(url)
+        await page.sleep(p["wait_seconds"])
+
+        _url = await page.evaluate("window.location.href")
+        result = {"url": _url if isinstance(_url, str) else url}
+
+        _title = await page.evaluate("document.title")
+        result["title"] = _title if isinstance(_title, str) else ""
+
+        mode = p["extract"]
+
+        if mode in ("text", "all"):
+            _text = await page.evaluate("document.body.innerText")
+            result["text"] = _text if isinstance(_text, str) else ""
+
+        if mode == "html":
+            result["html"] = await page.get_content()
+
+        if mode in ("links", "all"):
+            links_js = """
+                JSON.stringify(
+                    Array.from(document.querySelectorAll('a[href]'))
+                    .map(a => ({text: a.innerText.trim().substring(0,120), href: a.href}))
+                    .filter(a => a.text.length > 0 && a.href.startsWith('http'))
+                    .slice(0, 100)
+                )
+"""
+            links_raw = await page.evaluate(links_js)
+            result["links"] = json.loads(links_raw) if links_raw else []
+
+        if p.get("js_eval"):
+            js_result = await page.evaluate(p["js_eval"])
+            result["js_eval_result"] = js_result
+
+        # -- Detect blocked responses --
+        text_content = result.get("text", "")
+        title = result.get("title", "")
+        blocked_signals = ["403 forbidden", "access denied", "blocked", "request blocked",
+                           "error from cloudfront", "generated by cloudfront"]
+        is_blocked = (
+            len(text_content) < 100
+            and any(sig in text_content.lower() or sig in title.lower() for sig in blocked_signals)
+        )
+
+        if is_blocked:
+            result["_blocked"] = True
+            result["_attempt"] = attempt
+            record_request(domain, rate_file, was_blocked=True)
+
+            if attempt < max_retries:
+                backoff = (2 ** attempt) * 15  # 30s, 60s, 120s
+                result["_retrying_in"] = backoff
+                output({
+                    "retry": True,
+                    "attempt": attempt,
+                    "backoff_seconds": backoff,
+                    "reason": f"Blocked by {domain}, retrying in {backoff}s"
+                })
+                browser.stop()
+                time.sleep(backoff)
+                return await browse(attempt + 1)
+            else:
+                result["_max_retries_exceeded"] = True
+        else:
+            # Success
+            record_request(domain, rate_file, was_blocked=False)
+
+            # -- SPN queue (fire-and-forget Wayback preservation) --
+            if p.get("spn", True):
+                try:
+                    from lib.spn import enqueue_spn
+                    spn_res = enqueue_spn(url)
+                    result["_spn_queued"] = spn_res.get("queued", False)
+                except Exception:
+                    result["_spn_queued"] = False  # Never fail browse over SPN
+
+            # -- Cache the successful response (skip empty/minimal results) --
+            text_for_cache = result.get("text", "")
+            has_meaningful_content = (
+                mode not in ("text", "all")  # non-text modes always cacheable
+                or len(text_for_cache.strip()) >= 200  # text mode: need real content
+            )
+            if has_meaningful_content:
+                cache_data = dict(result)
+                cache_data["cached_at"] = time.time()
+                cache_data["cached_url"] = url
+                ensure_dir(cache_file.parent, "parent directory for cache_file")
+                try:
+                    cache_file.write_text(
+                        json.dumps(cache_data, ensure_ascii=False, indent=2),
+                        encoding="utf-8"
+                    )
+                    result["_cached"] = True
+                except:
+                    pass  # cache write failure is non-fatal
+            else:
+                result["_not_cached"] = "empty or minimal text content"
+
+        result["_attempt"] = attempt
+        return result
+    finally:
+        try:
+            browser.stop()
+        except:
+            pass
+
+# Suppress stderr noise from asyncio transport cleanup on Windows
+sys.stderr = open(os.devnull, 'w')
+import atexit
+atexit.register(lambda: None)
+
+result = asyncio.run(browse())
+output(result)

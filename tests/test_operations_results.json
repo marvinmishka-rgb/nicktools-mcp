@@ -1,0 +1,433 @@
+{
+  "timestamp": "2026-03-03T20:54:31.646930",
+  "graph_db": "nicktoolstest",
+  "entry_db": "nicktoolstest",
+  "skip_network": true,
+  "tiers": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "results": [
+    {
+      "operation": "core.server_info",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "v3.0.0, 55 ops",
+      "duration_ms": 0
+    },
+    {
+      "operation": "core.list_scripts",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "Scripts in C:\\Users\\user\\ClaudeFiles\\scripts:\n  archive_batch.py (3,302 bytes)\n",
+      "duration_ms": 10
+    },
+    {
+      "operation": "core.dispatch_health",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "{\n  \"stats\": {\n    \"total_calls\": 0,\n    \"window_span_secs\": 0,\n    \"calls_per_m",
+      "duration_ms": 0
+    },
+    {
+      "operation": "core.task_status",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "tasks=?",
+      "duration_ms": 0
+    },
+    {
+      "operation": "core.session_health",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "{\n  \"uptime_minutes\": 0.0,\n  \"total_calls\": 0,\n  \"error_rate\": 0.0,\n  \"guidance\"",
+      "duration_ms": 0
+    },
+    {
+      "operation": "core.watcher_status",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "{'status': 'running', 'audit_path': 'C:\\\\Users\\\\user\\\\AppData\\\\Roaming\\\\Claude\\\\local-agent-mode-se",
+      "duration_ms": 0
+    },
+    {
+      "operation": "core.registry_sync",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "status=ok",
+      "duration_ms": 204
+    },
+    {
+      "operation": "graph.read",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "search mode, results=0",
+      "duration_ms": 4
+    },
+    {
+      "operation": "graph.cypher",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "read mode, type=r",
+      "duration_ms": 13
+    },
+    {
+      "operation": "graph.node",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "add Person: {\"action\": \"add\", \"label\": \"Person\", \"warnings\": [], \"name\": \"_test_4b_person\", ",
+      "duration_ms": 7
+    },
+    {
+      "operation": "graph.node",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "add Organization OK",
+      "duration_ms": 5
+    },
+    {
+      "operation": "graph.node",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "update OK",
+      "duration_ms": 0
+    },
+    {
+      "operation": "graph.node",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "get OK",
+      "duration_ms": 42
+    },
+    {
+      "operation": "graph.rel",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "add EMPLOYED_BY OK",
+      "duration_ms": 10
+    },
+    {
+      "operation": "graph.wire_evidence",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "wired: {\"entity\": \"_test_4b_person\", \"label\": \"Person\", \"edges_wired\": 1, \"warnings\": [",
+      "duration_ms": 34
+    },
+    {
+      "operation": "graph.commit",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "batch: {\"results\": [{\"action\": \"add\", \"label\": \"Person\", \"warnings\": [], \"name\": \"_test_4b_person2\", \"creat",
+      "duration_ms": 20
+    },
+    {
+      "operation": "graph.write",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "entities written: {\"entities\": [{\"index\": 0, \"label\": \"Person\", \"name\": \"_test_4b_person3\", \"created\": true, \"properti",
+      "duration_ms": 11
+    },
+    {
+      "operation": "graph.read",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "network=1, found_rel=True",
+      "duration_ms": 41
+    },
+    {
+      "operation": "graph.deduplicate",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "scan: {\"action\": \"scan\", \"labels_scanned\": [\"Person\"], \"threshold\": 0.8, \"candidates\": [{\"a\": \"_test_4b_pe",
+      "duration_ms": 15
+    },
+    {
+      "operation": "graph.board_snapshot",
+      "status": "PASS",
+      "classification": "domain-specific",
+      "detail": "domain-specific: {\"organization\": \"_test_4b_org\", \"fiscal_year\": 2026, \"source\": \"990 filing FY20",
+      "duration_ms": 186
+    },
+    {
+      "operation": "graph.gds",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "list: ? algorithms",
+      "duration_ms": 28
+    },
+    {
+      "operation": "entry.session_start",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "sections=2",
+      "duration_ms": 382
+    },
+    {
+      "operation": "entry.create_entry",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "id=ls-20260303-002",
+      "duration_ms": 42
+    },
+    {
+      "operation": "entry.update_entry",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "updated ls-20260303-002",
+      "duration_ms": 245
+    },
+    {
+      "operation": "entry.session_audit",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "issues=?",
+      "duration_ms": 443
+    },
+    {
+      "operation": "core.run_python",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "stdout captured",
+      "duration_ms": 62
+    },
+    {
+      "operation": "core.run_command",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "echo captured",
+      "duration_ms": 236
+    },
+    {
+      "operation": "core.write_file",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "wrote 21 bytes",
+      "duration_ms": 0
+    },
+    {
+      "operation": "core.read_file",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "content read correctly",
+      "duration_ms": 0
+    },
+    {
+      "operation": "core.neo4j_query",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "query returned 42",
+      "duration_ms": 2
+    },
+    {
+      "operation": "core.read_document",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "read OK",
+      "duration_ms": 0
+    },
+    {
+      "operation": "core.run_script",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "needs valid script path; tested via run_python",
+      "duration_ms": 0
+    },
+    {
+      "operation": "core.restart_server",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "would restart live server; skip in test",
+      "duration_ms": 0
+    },
+    {
+      "operation": "core.backup_graph",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "backup: {\"status\": \"success\", \"database\": \"nicktoolstest\", \"format\": \"cypher\", \"file\": \"C:\\\\Users\\\\user\\\\Cl",
+      "duration_ms": 11
+    },
+    {
+      "operation": "core.sync_system_docs",
+      "status": "PASS",
+      "classification": "domain-flavored",
+      "detail": "landscape: {\"status\": \"ok\", \"generated_at\": \"2026-03-04T03:54:24.128802+00:00\", \"sections\": {\"system-landscape.",
+      "duration_ms": 9
+    },
+    {
+      "operation": "core.session_ingest",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "scan: {\"sessionCount\": 60, \"sessions\": [{\"sessionId\": \"local_01cd60c9-f4cc-...\", \"title\": \"Full system ass",
+      "duration_ms": 2339
+    },
+    {
+      "operation": "core.session_costs",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "cost data: {\"sessions_analyzed\": 55, \"aggregate\": {\"total_cost_usd\": 1221.7956, \"total_turn",
+      "duration_ms": 4314
+    },
+    {
+      "operation": "core.session_search",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "search: {\"query\": \"test\", \"scope\": [\"assistant\", \"summaries\", \"user\"], \"case_sensitive\":",
+      "duration_ms": 101
+    },
+    {
+      "operation": "core.backfill_discusses",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "dry_run: {\"dry_run\": true, \"entries_scanned\": 1, \"entries_without_ref\": 1, \"entries_proce",
+      "duration_ms": 17
+    },
+    {
+      "operation": "core.harvest_session",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "digest: {\"status\": \"digest\", \"session_id\": \"local_87a0507d-9165-4ddf-b9fc-d65e370f932f\",",
+      "duration_ms": 40
+    },
+    {
+      "operation": "core.session_recover",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "recover: {\"status\": \"no_data\", \"message\": \"No prior session with watcher data found. The ",
+      "duration_ms": 53
+    },
+    {
+      "operation": "research.browse_url",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "network tests skipped (--skip-network)",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.fetch_page",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "network tests skipped (--skip-network)",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.archive_source",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "network tests skipped (--skip-network)",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.save_page",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "network tests skipped (--skip-network)",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.check_sources",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "network tests skipped (--skip-network)",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.wayback_lookup",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "network tests skipped (--skip-network)",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.search_records",
+      "status": "SKIP",
+      "classification": "domain-flavored",
+      "detail": "network tests skipped (--skip-network)",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.vin_decode",
+      "status": "SKIP",
+      "classification": "domain-specific",
+      "detail": "network tests skipped (--skip-network)",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.search_business",
+      "status": "SKIP",
+      "classification": "domain-specific",
+      "detail": "network tests skipped (--skip-network)",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.extract_article",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "needs archived HTML file; tested via archive pipeline",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.search_pdf",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "needs PDF file; tested manually",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.queue_archive",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "queued: {\"status\": \"already_queued\", \"queue_id\": \"20260304_035411_70f99f4f4012\", \"url\": ",
+      "duration_ms": 1
+    },
+    {
+      "operation": "research.check_queue",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "status: {\"total\": 130, \"queued\": 1, \"processing\": 0, \"completed\": 126, \"failed\": 3, \"sta",
+      "duration_ms": 1
+    },
+    {
+      "operation": "research.read_staged",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "staged: {\"error\": \"Provide either 'queue_id' or 'url_hash' to identify the staged captur",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.archive_inventory",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "inventory: {\"dashboard\": {\"total_archives\": 326, \"total_valid\": 306, \"total_failed\": 20, \"t",
+      "duration_ms": 190
+    },
+    {
+      "operation": "research.process_queue",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "would process real queue; tested via queue_archive+check_queue",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.ingest_saved",
+      "status": "SKIP",
+      "classification": "generic",
+      "detail": "needs saved page directory; tested via archive pipeline",
+      "duration_ms": 0
+    },
+    {
+      "operation": "research.generate_report",
+      "status": "PASS",
+      "classification": "generic",
+      "detail": "report: {\"file_path\": \"C:\\\\Users\\\\user\\\\ClaudeFiles\\\\reports\\\\test-report_20260303-2054",
+      "duration_ms": 411
+    }
+  ],
+  "summary": {
+    "passed": 44,
+    "failed": 0,
+    "skipped": 15
+  }
+}

@@ -1,0 +1,25 @@
+# nicktools MCP Server -- Python Dependencies
+# Tested with Python 3.13.5 on Windows 11
+# Generated 2026-03-04 during Phase 4h fresh install test
+
+# -- Core (server won't start without these) -------------------
+mcp==1.12.0
+neo4j==6.1.0
+requests==2.32.5
+pyyaml==6.0.2
+lxml==6.0.2
+readability-lxml==0.8.4.1
+beautifulsoup4==4.14.3
+python-frontmatter==1.1.0
+
+# -- Browsing & Capture (needed for research tools) ------------
+nodriver==0.48.1
+websockets==16.0
+
+# -- PDF Processing (needed for search_pdf) --------------------
+pymupdf==1.27.1
+
+# -- Optional: only needed if using specific tools -------------
+# pdfplumber==0.11.7      # Alternative PDF extraction
+# openpyxl==3.1.5         # Excel file operations
+# python-docx==0.8.11     # Word document operations

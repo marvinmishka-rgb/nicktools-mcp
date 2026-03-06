@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+
+# Runtime data
+archives/
+*.log
+.browse_state/
+archive_queue/
+uploads/
+lifestream/
+manifest.json
+
+# Tool usage logs (contain real operation data)
+tools/*/PATTERNS.log
+
+# OS
+.DS_Store
+Thumbs.db
